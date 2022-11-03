@@ -1,13 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <div>hello line</div>
-    <img src='https://step.lme.jp/p/20532/ZzkAgIM6' id='get_image' alt='' style='width: 0 !important;height: 0 !important'><br><script src='https://step.lme.jp/js/conversion/get_url_referer.js'></script>
+    <div>キャンペーンお申し込み</div>
+    <input type="hidden" id="campaign" value="test1" />
+
+    <form>
+        <label for="name">名前</label>
+        <input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10">
+        <label for="name">電話番号</label>
+        <input type="number" id="tel" name="tel" required minlength="8" maxlength="16" size="10">
+        <label for="name">メール</label>
+        <input type="email" id="email" name="email" required minlength="8" maxlength="16" size="10">
+        <button type="submit" id="submitButton">送信</button>
+    </form>
+
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        // Promiseオブジェクトを使用する方法
+
+
+        // liff.isInClient();
+        liff
+            .init({
+                liffId: "1657616835-oJyQppea", // Use own liffId
+            })
+            .then(() => {
+                // Start to use liff's api
+            })
+            .catch((err) => {
+                console.log(err.code, err.message);
+            });
+
+        const createMessage = () => {
+            let message;
+            const campaign = document.getElementById('campaign').value;
+            const tel = document.getElementById('tel').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+
+            return message = `送信内容確認\n`
+                + `キャンペーン ${campaign}\n`
+                + `名前 ${name}\n`
+                + `電話番号 ${tel}\n`
+                + `メール ${email}\n`
+
+        }
+
+
+        const sendMessage = () => {
+            message = createMessage()
+            liff
+                .sendMessages([
+                    {
+                        type: "text",
+                        text: message,
+                    },
+                ])
+                .then(() => {
+                    result = confirm("データを送信しました。ウィンドウを閉じます。");
+                    if (result) {
+                        liff.closeWindow();
+                    }
+
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                });
+        }
+
+        const submitButton = document.getElementById('submitButton');
+        submitButton.addEventListener('click', () => {
+            sendMessage();
+        })
+
+    </script>
 </body>
+
 </html>
