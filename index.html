@@ -6,28 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-    <div>キャンペーンお申し込み</div>
-    <input type="hidden" id="campaign" value="test1" />
+    <h2 class="section-header"><span>switchプレゼントキャンペーン</span></h2>
 
     <form>
-        <label for="name">名前</label>
-        <input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10">
-        <label for="name">電話番号</label>
-        <input type="number" id="tel" name="tel" required minlength="8" maxlength="16" size="10">
-        <label for="name">メール</label>
-        <input type="email" id="email" name="email" required minlength="8" maxlength="16" size="10">
-        <button type="submit" id="submitButton">送信</button>
+        <label class="input-label" for="name">名前</label>
+        <input class="feedback-input" type="text" id="name" name="name">
+        <label class="input-label" for="tel">電話番号</label>
+        <input class="feedback-input" type="tel" id="tel" name="tel">
+        <label class="input-label" for="address">住所</label>
+        <input class="feedback-input" type="text" id="address" name="address">
+        <label class="input-label" for="comment">コメント</label>
+        <input class="feedback-input" type="text" id="comment" name="comment">
+        <button type="submit" id="submitButton">登録</button>
     </form>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.28.5/date_fns.min.js"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
-        // Promiseオブジェクトを使用する方法
-
-
-        // liff.isInClient();
         liff
             .init({
                 liffId: "1657616835-oJyQppea", // Use own liffId
@@ -39,25 +38,37 @@
                 console.log(err.code, err.message);
             });
 
-        const createMessage = () => {
-            let message;
-            const campaign = document.getElementById('campaign').value;
-            const tel = document.getElementById('tel').value;
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-
-
-            return message = `送信内容確認\n`
-                + `キャンペーン ${campaign}\n`
-                + `名前 ${name}\n`
-                + `電話番号 ${tel}\n`
-                + `メール ${email}\n`
-
+        const formatDate = (inputDate) => {
+            const y = inputDate.getFullYear();
+            const m = ('00' + (inputDate.getMonth()+1)).slice(-2);
+            const d = ('00' + inputDate.getDate()).slice(-2);
+            return (y + '-' + m + '-' + d);
         }
 
+        const createMessage = () => {
+            let message;
+            const messageType = "キャンペーン登録";
+            const campaign = "switchプレゼントキャンペーン";
+            const name = document.getElementById('name').value;
+            const tel = document.getElementById('tel').value;
+            const address = document.getElementById('address').value;
+            const comment = document.getElementById('comment').value;
+            const createdAt = formatDate(new Date());
+
+            return message = `登録内容\n`
+                + `-------------\n`
+                + `区分 ${messageType}\n`
+                + `キャンペーン名 ${campaign}\n`
+                + `名前 ${name}\n`
+                + `電話番号 ${tel}\n`
+                + `住所 ${address}\n`
+                + `コメント ${comment}\n`
+                + `登録日 ${createdAt}\n`
+        }
 
         const sendMessage = () => {
             message = createMessage()
+            console.log(message);
             liff
                 .sendMessages([
                     {
@@ -66,7 +77,7 @@
                     },
                 ])
                 .then(() => {
-                    result = confirm("データを送信しました。ウィンドウを閉じます。");
+                    const result = confirm("データを送信しました。ウィンドウを閉じます。");
                     if (result) {
                         liff.closeWindow();
                     }
