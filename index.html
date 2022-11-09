@@ -57,8 +57,6 @@
 
         const sendMessage = () => {
             message = createMessage()
-            console.log(message, "messageは取得できる");
-            alert(message);
             liff
                 .sendMessages([
                     {
@@ -67,7 +65,7 @@
                     },
                 ])
                 .then(() => {
-                    const result = confirm("データを送信しました。ウィンドウを閉じます。");
+                    const result = confirm("データを送信しました。\nウィンドウを閉じます。");
                     if (result) {
                         liff.closeWindow();
                     }
@@ -75,8 +73,6 @@
                 })
                 .catch((err) => {
                     alert("送信に失敗しました。");
-                    alert(err);
-                    console.log("error", err);
                 });
         }
 
@@ -92,13 +88,9 @@
             })
             .then(() => {
                 // Start to use liff's api
-                alert("成功");
             })
             .catch((err) => {
-                console.log(err.code, err.message);
-                alert(err.code);
-                alert(err.message);
-
+                alert("予期せぬエラーが発生しました。");
             });
         }
 
