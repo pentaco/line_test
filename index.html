@@ -12,7 +12,7 @@
 <body>
     <h2 class="section-header"><span>switchプレゼント</span></h2>
 
-    <form>
+    <form onsubmit="return false;">
         <label class="input-label" for="name">名前</label>
         <input class="feedback-input" type="text" id="name" name="name">
         <label class="input-label" for="tel">電話番号</label>
@@ -98,6 +98,7 @@
                 console.log(err.code, err.message);
                 alert(err.code);
                 alert(err.message);
+
             });
         }
 
