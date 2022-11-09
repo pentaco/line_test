@@ -27,17 +27,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.28.5/date_fns.min.js"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
-        liff
-            .init({
-                liffId: "1657618590-mPkWrrjV", // Use own liffId
-            })
-            .then(() => {
-                // Start to use liff's api
-            })
-            .catch((err) => {
-                console.log(err.code, err.message);
-            });
-
         const formatDate = (inputDate) => {
             const y = inputDate.getFullYear();
             const m = ('00' + (inputDate.getMonth()+1)).slice(-2);
@@ -68,7 +57,8 @@
 
         const sendMessage = () => {
             message = createMessage()
-            console.log(message);
+            console.log(message, "messageは取得できる");
+            alert(message);
             liff
                 .sendMessages([
                     {
@@ -84,6 +74,7 @@
 
                 })
                 .catch((err) => {
+                    alert("送信に失敗しました。");
                     console.log("error", err);
                 });
         }
@@ -92,6 +83,20 @@
         submitButton.addEventListener('click', () => {
             sendMessage();
         })
+
+        window.onload = () => {
+            liff
+            .init({
+                liffId: "1657618590-mPkWrrjV", // Use own liffId
+            })
+            .then(() => {
+                // Start to use liff's api
+                console.log("成功");
+            })
+            .catch((err) => {
+                console.log(err.code, err.message);
+            });
+        }
 
     </script>
 </body>
